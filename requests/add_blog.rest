@@ -1,0 +1,9 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+   "title": "React patterns 12",
+   "author": "Michael Channin",
+   "url": "https://reactpatterns.com/",
+   "likes": 20
+}
