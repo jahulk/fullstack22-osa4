@@ -4,7 +4,6 @@ const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
-const { TestWatcher } = require('jest')
 
 beforeEach(async () => {
    await Blog.deleteMany({})
@@ -90,6 +89,34 @@ test('blog without title or url is not added', async () => {
 
    blogsAtEnd = await helper.blogsInDb()
    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+})
+
+test('blog can be deleted', async () => {
+   const blogsAtStart = await helper.blogsInDb()
+   const blogToDelete = blogsAtStart[0]
+
+   await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+
+   const blogsAtEnd = await helper.blogsInDb()
+
+   expect(blogsAtEnd).toHaveLength(blogsAtStart.length - 1)
+})
+
+test('blog can be updated', async () => {
+   const blogsAtStart = await helper.blogsInDb()
+   const blogToUpdate = blogsAtStart[0]
+   
+   const blog = {...blogToUpdate, likes: blogToUpdate.likes + 1}
+
+   await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(blog)
+      .expect(200)
+
+   const blogsAtEnd = await helper.blogsInDb()
+   expect(blogsAtEnd[0].likes).toBe(blogToUpdate.likes + 1)
 })
 
 afterAll(() => {
