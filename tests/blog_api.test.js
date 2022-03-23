@@ -14,7 +14,7 @@ test('all blogs are returned as JSON', async () => {
    const response = await api
       .get('/api/blogs')
       .expect(200)
-      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect('Content-Type', /application\/json/)
 
    expect(response.body).toHaveLength(helper.initialBlogs.length)
 })
@@ -39,7 +39,7 @@ test('a valid blog can be added', async () => {
       .post('/api/blogs')
       .send(newBlog)
       .expect(201)
-      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect('Content-Type', /application\/json/)
 
    const blogsAtEnd = await helper.blogsInDb()
    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
@@ -56,7 +56,7 @@ test('if likes is undefined then likes is set to 0', async () => {
       .post('/api/blogs')
       .send(newBlog)
       .expect(201)
-      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect('Content-Type', /application\/json/)
 
    expect(response.body.likes).toBe(0)
 })

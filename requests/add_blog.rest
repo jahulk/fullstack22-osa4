@@ -2,8 +2,8 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-   "title": "React patterns 123",
-   "author": "Michael Channing",
+   "title": "React patterns 1234",
+   "author": "Michael Channing Tatum",
    "url": "https://reactpatterns.com/",
    "likes": 20
 }
