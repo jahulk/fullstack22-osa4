@@ -1,6 +1,8 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+const { userExtractor } = require('../utils/middleware')
 
 blogRouter.get('/', async (request, response) => {
    const blogs = await Blog
@@ -20,10 +22,8 @@ blogRouter.get('/:id', async (request, response) => {
    }
 })
 
-blogRouter.post('/', async (request, response) => {
-   const body = request.body
-
-   const user = await User.findById("623af124c7005a16add482d0")
+blogRouter.post('/', userExtractor, async (request, response) => {
+   const { body, user } = request
 
    if (body.title === undefined || body.title === '' || body.url === undefined || body.url === '') {
       return response.status(400).json({ error: 'title or url missing' })
@@ -59,9 +59,21 @@ blogRouter.put('/:id', async (request, response) => {
    response.json(updatedBlog)
 })
 
-blogRouter.delete('/:id', async (request, response) => {
-   await Blog.findByIdAndRemove(request.params.id)
-   response.status(204).end()
+blogRouter.delete('/:id', userExtractor, async (request, response) => {
+   const { user } = request
+
+   const blog = await Blog.findById(request.params.id)
+
+   if (!blog) {
+      return response.status(404).json({ error: 'blog not found' })
+   }
+
+   if (blog.user.toString() === user._id.toString()) {
+      await Blog.findByIdAndRemove(request.params.id)
+      response.status(204).end()
+   } else {
+      response.status(401).json({ error: 'no permission to delete' })
+   }
 })
 
 

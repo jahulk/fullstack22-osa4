@@ -5,6 +5,7 @@ const app = express()
 const cors = require('cors')
 const blogRouter = require('./controllers/blogs')
 const userRouter = require('./controllers/users')
+const loginRouter = require('./controllers/login')
 const middleware = require('./utils/middleware')
 const mongoose = require('mongoose')
 const morgan = require('morgan')
@@ -20,7 +21,7 @@ mongoose
 
 app.use(cors())
 app.use(express.json())
-
+app.use(middleware.tokenExtractor)
 morgan.token('body', (req) => {
    return JSON.stringify(req.body)
 })
@@ -28,6 +29,7 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :b
 
 app.use('/api/blogs', blogRouter)
 app.use('/api/users', userRouter)
+app.use('/api/login', loginRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

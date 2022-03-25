@@ -1,9 +1,10 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
+#Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhc2kiLCJpZCI6IjYyM2FmMTI0YzcwMDVhMTZhZGQ0ODJkMCIsImlhdCI6MTY0ODIwOTg1M30.k5a6etzihIZR_F8nzseZVedH2IPysIhSaaGDa_WKkIM
 
 {
-   "title": "React patterns 1234",
+   "title": "React patterns 78",
    "author": "Michael Channing Tatum",
    "url": "https://reactpatterns.com/",
-   "likes": 20
+   "likes": 10
 }
